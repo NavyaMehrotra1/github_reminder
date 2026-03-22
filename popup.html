@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Reminder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="app" class="app loading">
+
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-logo">🐙 GitHub Reminder</div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-view="main">Today</button>
+        <button class="nav-tab" data-view="wrapped">Wrapped</button>
+      </div>
+      <button class="nav-settings" title="Settings" id="openSettings">⚙️</button>
+    </nav>
+
+    <!-- MAIN VIEW -->
+    <div id="view-main" class="view active">
+      <!-- Loading state -->
+      <div id="loading-state" class="state-loading">
+        <div class="spinner"></div>
+        <p>Checking your streak…</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="state-error hidden">
+        <div class="error-icon">😕</div>
+        <h3 id="error-title">Something went wrong</h3>
+        <p id="error-message">Please check your settings.</p>
+        <button class="btn btn-primary" id="errorOpenSettings">Open Settings</button>
+      </div>
+
+      <!-- Main content -->
+      <div id="main-content" class="hidden">
+        <!-- Date -->
+        <div class="today-date" id="todayDate"></div>
+
+        <!-- Streak Card -->
+        <div class="streak-card">
+          <div class="streak-label">Current Streak</div>
+          <div class="streak-number">
+            <span id="streakCount" class="streak-digits">0</span>
+            <span class="streak-fire">🔥</span>
+          </div>
+          <div class="streak-unit">days</div>
+        </div>
+
+        <!-- Status Banner -->
+        <div id="statusBanner" class="status-banner">
+          <div class="status-icon" id="statusIcon"></div>
+          <div class="status-text">
+            <div class="status-title" id="statusTitle"></div>
+            <div class="status-sub" id="statusSub"></div>
+          </div>
+          <button class="btn btn-cta hidden" id="statusCta"></button>
+        </div>
+
+        <!-- Heatmap 28 days -->
+        <div class="section-label">Last 28 Days</div>
+        <div class="heatmap-mini" id="heatmapMini"></div>
+
+        <!-- Quick Stats -->
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-value" id="statCurrent">—</div>
+            <div class="stat-label">Current</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-value" id="statLongest">—</div>
+            <div class="stat-label">Best</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-value" id="statMonth">—</div>
+            <div class="stat-label">This Month</div>
+          </div>
+        </div>
+
+        <!-- Wrapped button -->
+        <button class="btn btn-wrapped" id="goWrapped">📊 View Wrapped</button>
+      </div>
+    </div>
+
+    <!-- WRAPPED VIEW -->
+    <div id="view-wrapped" class="view hidden">
+      <div class="wrapped-scroll" id="wrappedContent">
+        <div class="wrapped-loading hidden" id="wrappedLoading">
+          <div class="spinner"></div>
+          <p>Building your stats…</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

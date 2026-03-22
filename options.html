@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Reminder — Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <div class="header-icon">🐙</div>
+      <div>
+        <h1 class="header-title">GitHub Reminder</h1>
+        <p class="header-sub">Keep your streak alive, every day.</p>
+      </div>
+    </header>
+
+    <main class="settings-form">
+
+      <!-- GitHub Token -->
+      <div class="form-section">
+        <div class="section-title">GitHub Personal Access Token</div>
+        <div class="section-desc">
+          Required to check your contributions.
+          <a href="https://github.com/settings/tokens/new?scopes=read:user&description=GitHub+Reminder" target="_blank">Generate a token →</a>
+          (only <code>read:user</code> scope needed)
+        </div>
+        <div class="input-wrap">
+          <input
+            type="password"
+            id="githubToken"
+            class="input"
+            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="toggle-visibility" id="toggleToken" title="Show/hide token">👁</button>
+        </div>
+      </div>
+
+      <!-- GitHub Username -->
+      <div class="form-section">
+        <div class="section-title">GitHub Username</div>
+        <div class="section-desc">Your GitHub handle (without the @).</div>
+        <input
+          type="text"
+          id="githubUsername"
+          class="input"
+          placeholder="octocat"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <!-- Notifications -->
+      <div class="form-section">
+        <div class="section-row">
+          <div>
+            <div class="section-title">Reminder Notifications</div>
+            <div class="section-desc">Get nudged if you haven't committed yet.</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notificationsEnabled" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div id="reminderTimes" class="reminder-times">
+          <div class="time-row">
+            <label class="time-label">First reminder</label>
+            <input type="time" id="reminderTime1" class="input input-time" value="20:00" />
+          </div>
+          <div class="time-row">
+            <label class="time-label">Last chance</label>
+            <input type="time" id="reminderTime2" class="input input-time" value="22:00" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-section form-actions">
+        <button class="btn btn-secondary" id="clearCache">🗑 Clear Cached Data</button>
+        <button class="btn btn-primary" id="saveBtn">Save Settings</button>
+      </div>
+
+      <!-- Status message -->
+      <div id="statusMsg" class="status-msg hidden"></div>
+
+    </main>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
