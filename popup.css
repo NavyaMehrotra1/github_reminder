@@ -621,3 +621,49 @@ html, body {
 @keyframes pulse { from { transform: scale(1.05); } to { transform: scale(1); } }
 
 @keyframes fadein { to { opacity: 1; } }
+
+/* Wrapped dynamic elements (replaces inline styles in wrapped.js) */
+.wrapped-month-total {
+  font-size: 40px;
+  font-weight: 900;
+  color: #15803d;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.wrapped-month-sub {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 14px;
+}
+
+.wrapped-best-day-sub {
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.heatmap-month-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-light);
+  white-space: nowrap;
+  width: 12px;
+  flex-shrink: 0;
+}
+
+.wrapped-tags-empty {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.share-tag-line {
+  margin-top: 12px;
+  font-size: 13px;
+  opacity: 0.9;
+  font-weight: 700;
+}

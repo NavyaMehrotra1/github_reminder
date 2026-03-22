@@ -182,7 +182,7 @@ async function initWrapped() {
   } catch (err) {
     loadingEl.classList.add('hidden');
     container.innerHTML = `
-      <div class="state-error" style="display:flex">
+      <div class="state-error">
         <div class="error-icon">😕</div>
         <h3>Couldn't load stats</h3>
         <p>${err.message}</p>

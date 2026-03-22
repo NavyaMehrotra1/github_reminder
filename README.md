@@ -1,6 +1,6 @@
 # GitHub Reminder
 
-A Duolingo-inspired Chrome extension that helps you keep your GitHub contribution streak alive — with beautiful stats, celebration animations, and gentle notifications.
+A Chrome extension that helps you keep your GitHub contribution streak alive — with beautiful stats, celebration animations, and gentle notifications.
 
 ---
 

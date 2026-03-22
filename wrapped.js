@@ -10,27 +10,15 @@ export function renderWrapped(container, cache) {
   const monthName = MONTH_NAMES[now.getMonth()];
   const year = now.getFullYear();
 
-  // Clear previous content except the loading indicator
   const loadingEl = document.getElementById('wrappedLoading');
   container.innerHTML = '';
   if (loadingEl) container.appendChild(loadingEl);
 
-  // 1. Monthly Summary
-  container.appendChild(buildMonthlySummary(stats, monthName, days));
-
-  // 2. Streak Stats
+  container.appendChild(buildMonthlySummary(stats, monthName));
   container.appendChild(buildStreakCard(stats));
-
-  // 3. Best Day
   container.appendChild(buildBestDayCard(days, stats));
-
-  // 4. Full Year Heatmap
   container.appendChild(buildFullHeatmap(days, year));
-
-  // 5. Personality Tags
   container.appendChild(buildTagsCard(stats));
-
-  // 6. Share Card
   container.appendChild(buildShareCard(stats, username, monthName));
 }
 
@@ -45,17 +33,17 @@ function card(title) {
 }
 
 // --- 1. Monthly Summary ---
-function buildMonthlySummary(stats, monthName, days) {
+function buildMonthlySummary(stats, monthName) {
   const c = card(`Your ${monthName} in Code 🌱`);
 
   const totalEl = document.createElement('div');
-  totalEl.style.cssText = 'font-size:40px;font-weight:900;color:#15803d;text-align:center;margin-bottom:4px;';
+  totalEl.className = 'wrapped-month-total';
   totalEl.textContent = '0';
   c.appendChild(totalEl);
   countUp(totalEl, stats.thisMonthTotal, 1000);
 
   const subEl = document.createElement('div');
-  subEl.style.cssText = 'text-align:center;font-size:13px;font-weight:700;color:#475569;margin-bottom:14px;';
+  subEl.className = 'wrapped-month-sub';
   subEl.textContent = `contributions · ${stats.thisMonthContribDays} of ${stats.daysInMonth} days active`;
   c.appendChild(subEl);
 
@@ -65,7 +53,12 @@ function buildMonthlySummary(stats, monthName, days) {
 
   const progRow = document.createElement('div');
   progRow.className = 'prog-row';
-  progRow.innerHTML = `<span>Active days</span><span>${pct}%</span>`;
+  const progLeft = document.createElement('span');
+  progLeft.textContent = 'Active days';
+  const progRight = document.createElement('span');
+  progRight.textContent = `${pct}%`;
+  progRow.appendChild(progLeft);
+  progRow.appendChild(progRight);
   c.appendChild(progRow);
 
   const bg = document.createElement('div');
@@ -97,7 +90,14 @@ function buildStreakCard(stats) {
   for (const [label, value] of rows) {
     const row = document.createElement('div');
     row.className = 'streak-detail-row';
-    row.innerHTML = `<span class="streak-detail-label">${label}</span><span class="streak-detail-value">${value}</span>`;
+    const lbl = document.createElement('span');
+    lbl.className = 'streak-detail-label';
+    lbl.textContent = label;
+    const val = document.createElement('span');
+    val.className = 'streak-detail-value';
+    val.textContent = value;
+    row.appendChild(lbl);
+    row.appendChild(val);
     c.appendChild(row);
   }
 
@@ -109,11 +109,10 @@ function buildBestDayCard(days, stats) {
   const c = card('Best Day 💪');
 
   const sub = document.createElement('div');
-  sub.style.cssText = 'font-size:14px;font-weight:700;color:#475569;margin-bottom:16px;';
+  sub.className = 'wrapped-best-day-sub';
   sub.textContent = `Your power day is ${stats.bestDayOfWeek}`;
   c.appendChild(sub);
 
-  // Day of week bar chart
   const dowCounts = Array(7).fill(0);
   for (const d of days) {
     if (d.count > 0) {
@@ -157,27 +156,21 @@ function buildBestDayCard(days, stats) {
 }
 
 // --- 4. Full Year Heatmap ---
-function buildFullHeatmap(days, year) {
+function buildFullHeatmap(days) {
   const c = card('Year in Code 🗓️');
 
-  // Build a map for fast lookup
   const dayMap = {};
   for (const d of days) dayMap[d.date] = d.count;
 
-  // Figure out the start date (Sunday on/before Jan 1 of the earliest year in data,
-  // but practically we show last 365 days aligned to weeks)
   const today = new Date();
   const todayStr = today.toISOString().slice(0, 10);
 
-  // Find the earliest Sunday that covers all 365 days of data
   const startDate = new Date(today);
   startDate.setDate(startDate.getDate() - 364);
-  // Roll back to previous Sunday
   startDate.setDate(startDate.getDate() - startDate.getDay());
 
-  // Build weeks array
   const weeks = [];
-  let cur = new Date(startDate);
+  const cur = new Date(startDate);
 
   while (cur <= today) {
     const week = [];
@@ -192,7 +185,6 @@ function buildFullHeatmap(days, year) {
   // Month labels
   const labelsRow = document.createElement('div');
   labelsRow.className = 'heatmap-month-labels';
-  labelsRow.style.cssText = 'display:flex;gap:2px;margin-bottom:4px;overflow:hidden;';
 
   let lastMonth = -1;
   for (const week of weeks) {
@@ -200,8 +192,6 @@ function buildFullHeatmap(days, year) {
     const m = firstDay.getMonth();
     const lbl = document.createElement('div');
     lbl.className = 'heatmap-month-label';
-    lbl.style.width = '12px';
-    lbl.style.flexShrink = '0';
     if (m !== lastMonth) {
       lbl.textContent = MONTH_NAMES[m].slice(0, 3);
       lastMonth = m;
@@ -250,7 +240,7 @@ function buildTagsCard(stats) {
 
   if (stats.tags.length === 0) {
     const p = document.createElement('p');
-    p.style.cssText = 'color:#94a3b8;font-size:14px;font-weight:600;';
+    p.className = 'wrapped-tags-empty';
     p.textContent = 'Keep contributing to unlock personality tags!';
     c.appendChild(p);
     return c;
@@ -277,23 +267,52 @@ function buildShareCard(stats, username, monthName) {
   const preview = document.createElement('div');
   preview.className = 'share-card-preview';
   preview.id = 'shareCardInner';
-  preview.innerHTML = `
-    <div class="share-username">@${username || 'you'}</div>
-    <div class="share-big-number">${stats.currentStreak}🔥</div>
-    <div class="share-sub">day streak</div>
-    <div class="share-divider"></div>
-    <div class="share-stats-row">
-      <div class="share-stat">
-        <div class="share-stat-val">${stats.thisMonthTotal}</div>
-        <div class="share-stat-lbl">${monthName} contribs</div>
-      </div>
-      <div class="share-stat">
-        <div class="share-stat-val">${stats.longestStreak}</div>
-        <div class="share-stat-lbl">best streak</div>
-      </div>
-    </div>
-    ${stats.tags.length > 0 ? `<div style="margin-top:12px;font-size:13px;opacity:0.9;font-weight:700;">${stats.tags[0].emoji} ${stats.tags[0].label}</div>` : ''}
-  `;
+
+  const userDiv = document.createElement('div');
+  userDiv.className = 'share-username';
+  userDiv.textContent = `@${username || 'you'}`;
+
+  const bigNum = document.createElement('div');
+  bigNum.className = 'share-big-number';
+  bigNum.textContent = `${stats.currentStreak}🔥`;
+
+  const sub = document.createElement('div');
+  sub.className = 'share-sub';
+  sub.textContent = 'day streak';
+
+  const divider = document.createElement('div');
+  divider.className = 'share-divider';
+
+  const statsRow = document.createElement('div');
+  statsRow.className = 'share-stats-row';
+
+  for (const [val, lbl] of [[stats.thisMonthTotal, `${monthName} contribs`], [stats.longestStreak, 'best streak']]) {
+    const stat = document.createElement('div');
+    stat.className = 'share-stat';
+    const v = document.createElement('div');
+    v.className = 'share-stat-val';
+    v.textContent = val;
+    const l = document.createElement('div');
+    l.className = 'share-stat-lbl';
+    l.textContent = lbl;
+    stat.appendChild(v);
+    stat.appendChild(l);
+    statsRow.appendChild(stat);
+  }
+
+  preview.appendChild(userDiv);
+  preview.appendChild(bigNum);
+  preview.appendChild(sub);
+  preview.appendChild(divider);
+  preview.appendChild(statsRow);
+
+  if (stats.tags.length > 0) {
+    const tagLine = document.createElement('div');
+    tagLine.className = 'share-tag-line';
+    tagLine.textContent = `${stats.tags[0].emoji} ${stats.tags[0].label}`;
+    preview.appendChild(tagLine);
+  }
+
   c.appendChild(preview);
 
   const btn = document.createElement('button');
