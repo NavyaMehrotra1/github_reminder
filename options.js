@@ -15,7 +15,7 @@ async function loadSettings() {
   if (data.githubToken) $('githubToken').value = data.githubToken;
   if (data.githubUsername) $('githubUsername').value = data.githubUsername;
   $('notificationsEnabled').checked = data.notificationsEnabled !== false;
-  $('reminderTime1').value = data.reminderTime1 || '20:00';
+  $('reminderTime1').value = data.reminderTime1 || '20:30';
   $('reminderTime2').value = data.reminderTime2 || '22:00';
 
   updateReminderVisibility();
@@ -63,6 +63,21 @@ $('saveBtn').addEventListener('click', async () => {
     btn.textContent = 'Save Settings';
     btn.classList.remove('saved');
   }, 2500);
+});
+
+// Test notification
+$('testNotifBtn').addEventListener('click', async () => {
+  const btn = $('testNotifBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    await chrome.runtime.sendMessage({ type: 'TEST_NOTIFICATION' });
+    showStatus('Notification sent! If you didn\'t see it, check System Settings → Notifications → Chrome.', 'success');
+  } catch {
+    showStatus('Could not send notification — make sure the extension is active.', 'error');
+  }
+  btn.disabled = false;
+  btn.textContent = '🔔 Send Test Notification';
 });
 
 // Clear cache

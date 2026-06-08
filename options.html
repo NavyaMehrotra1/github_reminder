@@ -72,13 +72,24 @@
         <div id="reminderTimes" class="reminder-times">
           <div class="time-row">
             <label class="time-label">First reminder</label>
-            <input type="time" id="reminderTime1" class="input input-time" value="20:00" />
+            <input type="time" id="reminderTime1" class="input input-time" value="20:30" />
           </div>
           <div class="time-row">
             <label class="time-label">Last chance</label>
             <input type="time" id="reminderTime2" class="input input-time" value="22:00" />
           </div>
         </div>
+      </div>
+
+      <!-- Test notification -->
+      <div class="form-section">
+        <div class="section-title">Test Notifications</div>
+        <div class="section-desc">
+          Fire a sample notification right now to confirm they're working.
+          If nothing appears, check that Chrome is allowed to send notifications in your
+          <strong>System Settings → Notifications → Chrome</strong>.
+        </div>
+        <button class="btn btn-secondary" id="testNotifBtn">🔔 Send Test Notification</button>
       </div>
 
       <!-- Actions -->
