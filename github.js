@@ -127,7 +127,8 @@ export function computeStats(days) {
   const thisMonthDays = days.filter(d => d.date.startsWith(monthStr));
   const thisMonthTotal = thisMonthDays.reduce((s, d) => s + d.count, 0);
   const thisMonthContribDays = thisMonthDays.filter(d => d.count > 0).length;
-  const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+  // Use days elapsed so far (not total days in month) for a meaningful active-day ratio
+  const daysInMonth = new Date().getDate();
 
   // Day of week analysis
   const dayOfWeekCounts = Array(7).fill(0); // 0=Sun
@@ -150,7 +151,9 @@ export function computeStats(days) {
   let streakStartDate = null;
   if (currentStreak > 0) {
     const streakStart = new Date(todayStr);
-    streakStart.setDate(streakStart.getDate() - (currentStreak - 1));
+    // Offset by streak-1 if contributed today, streak if not (streak ends yesterday)
+    const offset = contributedToday ? currentStreak - 1 : currentStreak;
+    streakStart.setDate(streakStart.getDate() - offset);
     streakStartDate = streakStart.toISOString().slice(0, 10);
   }
 
