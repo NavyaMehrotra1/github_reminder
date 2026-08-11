@@ -181,12 +181,18 @@ async function initWrapped() {
     renderWrapped(container, cache);
   } catch (err) {
     loadingEl.classList.add('hidden');
-    container.innerHTML = `
-      <div class="state-error">
-        <div class="error-icon">😕</div>
-        <h3>Couldn't load stats</h3>
-        <p>${err.message}</p>
-      </div>`;
+    container.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.className = 'state-error';
+    const icon = document.createElement('div');
+    icon.className = 'error-icon';
+    icon.textContent = '😕';
+    const h3 = document.createElement('h3');
+    h3.textContent = "Couldn't load stats";
+    const p = document.createElement('p');
+    p.textContent = err.message;
+    wrap.append(icon, h3, p);
+    container.appendChild(wrap);
   }
 }
 

@@ -4,15 +4,15 @@ const $ = id => document.getElementById(id);
 
 // Load saved settings on open
 async function loadSettings() {
+  const { githubToken } = await chrome.storage.local.get('githubToken');
   const data = await chrome.storage.sync.get([
-    'githubToken',
     'githubUsername',
     'notificationsEnabled',
     'reminderTime1',
     'reminderTime2',
   ]);
 
-  if (data.githubToken) $('githubToken').value = data.githubToken;
+  if (githubToken) $('githubToken').value = githubToken;
   if (data.githubUsername) $('githubUsername').value = data.githubUsername;
   $('notificationsEnabled').checked = data.notificationsEnabled !== false;
   $('reminderTime1').value = data.reminderTime1 || '20:30';
@@ -46,7 +46,8 @@ $('saveBtn').addEventListener('click', async () => {
   if (!token) { showStatus('Please enter your GitHub Personal Access Token.', 'error'); return; }
   if (!username) { showStatus('Please enter your GitHub username.', 'error'); return; }
 
-  await chrome.storage.sync.set({ githubToken: token, githubUsername: username, notificationsEnabled, reminderTime1, reminderTime2 });
+  await chrome.storage.local.set({ githubToken: token });
+  await chrome.storage.sync.set({ githubUsername: username, notificationsEnabled, reminderTime1, reminderTime2 });
 
   // Clear cache so next popup load re-fetches
   await chrome.storage.local.remove(['contributionCache', 'cacheTimestamp']);

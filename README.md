@@ -1,6 +1,6 @@
 # GitHub Reminder
 
-A Chrome extension that helps you keep your GitHub contribution streak alive, the nwith beautiful stats, celebration animations, and gentle notifications.
+A Chrome extension that helps you keep your GitHub contribution streak alive, with beautiful stats, celebration animations, and gentle notifications.
 
 ---
 
@@ -92,3 +92,9 @@ github_reminder/
 | `alarms` | Schedule hourly refresh + nightly reminders |
 | `notifications` | Show streak reminder notifications |
 | `host_permissions: api.github.com` | Fetch your contribution data |
+
+---
+
+## Privacy
+
+See [PRIVACY.md](PRIVACY.md) — your GitHub token never leaves your device, and everything else stays between your browser and GitHub's API.

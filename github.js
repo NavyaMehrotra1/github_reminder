@@ -204,14 +204,15 @@ export async function getCachedOrFetch(forceRefresh = false) {
     }
   }
 
-  const settings = await chrome.storage.sync.get(['githubToken', 'githubUsername']);
-  if (!settings.githubToken || !settings.githubUsername) {
+  const { githubToken } = await chrome.storage.local.get('githubToken');
+  const { githubUsername } = await chrome.storage.sync.get('githubUsername');
+  if (!githubToken || !githubUsername) {
     throw new Error('NOT_CONFIGURED');
   }
 
-  const data = await fetchContributions(settings.githubToken, settings.githubUsername);
+  const data = await fetchContributions(githubToken, githubUsername);
   const stats = computeStats(data.days);
-  const cache = { days: data.days, stats, username: settings.githubUsername };
+  const cache = { days: data.days, stats, username: githubUsername };
 
   await chrome.storage.local.set({ contributionCache: cache, cacheTimestamp: now });
   return cache;
